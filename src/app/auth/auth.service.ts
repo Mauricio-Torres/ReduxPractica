@@ -17,6 +17,9 @@ import { AppState } from '../app.reducer';
 
 
 import { ActivarLoadingAction, DesactivarLoadingAction } from './../shared/ui.actions';
+import { User } from '../models/user.model';
+import { SetUserAction } from './auth.actions';
+import { Subscription } from 'rxjs';
 
 
 
@@ -25,6 +28,8 @@ import { ActivarLoadingAction, DesactivarLoadingAction } from './../shared/ui.ac
 })
 export class AuthService {
 
+
+  userSuscription: Subscription = new Subscription();
 
   constructor(private firebaseAuth: AngularFireAuth,
               private router: Router,
@@ -94,13 +99,23 @@ export class AuthService {
   }
 
   logout() {
-    this.firebaseAuth
-      .signOut();
+    this.userSuscription.unsubscribe();
+    this.firebaseAuth.signOut();
+    this.router.navigate(['/login']);
+
   }
 
   initAuthListiner() {
     this.firebaseAuth.authState.subscribe((user: any) => {
-
+      if (user) {
+        this.userSuscription = this.firestore.doc(`${ user.uid }/usuario` ).valueChanges().subscribe(
+          (userObjMod: any) => {
+            this.store.dispatch( new SetUserAction(new User(userObjMod)));
+          }
+        );
+      } else {
+        this.userSuscription.unsubscribe();
+      }
     });
   }
 
