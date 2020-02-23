@@ -14,7 +14,7 @@ export class User {
 }
 
 interface ObjInput {
-  uid: string;
-  email: string;
-  nombre: string;
-}
+    uid: string;
+    email: string;
+    nombre: string;
+  }

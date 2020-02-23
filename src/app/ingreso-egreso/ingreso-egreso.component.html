@@ -2,6 +2,63 @@
   <div class="col-6">
       <div class="card card-statistics">
         <div class="card-body">
+          <h4 class="card-title">Agregar Ingreso / Egreso</h4>
+
+          <p class="card-description">
+            Especifique el monto y el tipo
+          </p>
+
+
+
+            <form [formGroup]="formGroup" (ngSubmit)="crearIngresos()"  >
+              <div class="form-group">
+                <label class="label">Descripcion</label>
+                <div class="input-group">
+                  <input type="text" class="form-control"  formControlName="description" placeholder="Descripcion" >
+                  <div class="input-group-append">
+                    <span class="input-group-text">
+                      <i class="fas fa-chalkboard-teacher"></i>
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="label">Monto</label>
+                <div class="input-group">
+                  <input type="number" class="form-control" formControlName="monto" placeholder="Monto" >
+                  <div class="input-group-append">
+                    <span class="input-group-text">
+                      <i class="far fa-money-bill-alt"></i>
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                  <button  *ngIf="tipo === 'ingreso' && !cargando" (click) = "changeState()" type="button" class="btn btn-primary submit-btn btn-block">
+                    <i class="far fa-handshake"></i>
+                    Ingreso</button>
+                  <button  *ngIf="tipo === 'egreso' && !cargando" (click) = "changeState()" type="button" class="btn btn-success submit-btn btn-block">
+                    <i class="fas fa-file-code"></i>
+                    Egreso</button>
+                  <button [disabled] ="formGroup.invalid" *ngIf="!cargando" type="submit" class="btn btn-info submit-btn " style="margin: 5px;">
+                    <i class="fas fa-edit"></i>
+                    Registrar</button>
+                  <button type="reset" class="btn btn-warning submit-btn " style="margin: 5px;">
+                    <i class="fas fa-shower"></i>
+                    Reset</button>
+
+                  <button [disabled] ="formGroup.invalid" (click) ="tipo = 'ingreso'" *ngIf="cargando"  class="btn btn-success submit-btn btn-block">
+                    <i class="fa fa-spin fa-sync"></i>
+                    Procesando...</button>
+              </div>
+            </form>
+
+
+
+
+
+
+
 
           <div class="clearfix">
             <div class="float-left">

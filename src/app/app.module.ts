@@ -14,7 +14,7 @@ import { NavbarComponent } from './shared/navbar/navbar.component';
 import { SidebarComponent } from './shared/sidebar/sidebar.component';
 import { RegisterComponent } from './auth/register/register.component';
 import { RouterModule } from './router/router.module';
-
+import { ReactiveFormsModule  } from '@angular/forms';
 
 import { StoreModule } from '@ngrx/store';
 import { appReducer } from './app.reducer';
@@ -29,8 +29,9 @@ import { AngularFireDatabaseModule } from '@angular/fire/database';
 
 import { environment } from '../environments/environment';
 import { AuthService } from './auth/auth.service';
+import { OrdenIngresoEgresoPipe } from './ingreso-egreso/orden-ingreso-egreso.pipe';
 
-
+import { ChartsModule } from 'ng2-charts';
 
 @NgModule({
   declarations: [
@@ -43,10 +44,13 @@ import { AuthService } from './auth/auth.service';
     FooterComponent,
     NavbarComponent,
     SidebarComponent,
-    RegisterComponent
+    RegisterComponent,
+    OrdenIngresoEgresoPipe
   ],
   imports: [
     FormsModule,
+    ChartsModule,
+    ReactiveFormsModule,
     StoreModule.forRoot(appReducer),
     StoreDevtoolsModule.instrument({
       maxAge: 25, // Retains last 25 states

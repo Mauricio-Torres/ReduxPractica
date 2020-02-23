@@ -14,7 +14,7 @@ import { Subscription } from 'rxjs';
 export class RegisterComponent implements OnInit {
 
   cargando: boolean;
-  suscription: Subscription;
+  suscription: Subscription = new Subscription();
 
 
   constructor(private authService: AuthService, private store: Store<AppState>) { }

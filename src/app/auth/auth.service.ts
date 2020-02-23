@@ -18,8 +18,9 @@ import { AppState } from '../app.reducer';
 
 import { ActivarLoadingAction, DesactivarLoadingAction } from './../shared/ui.actions';
 import { User } from '../models/user.model';
-import { SetUserAction } from './auth.actions';
+import { SetUserAction, UnSetUserAction } from './auth.actions';
 import { Subscription } from 'rxjs';
+import { IngresoEgresoService } from '../ingreso-egreso/ingreso-egreso.service';
 
 
 
@@ -28,11 +29,12 @@ import { Subscription } from 'rxjs';
 })
 export class AuthService {
 
-
+  usuario: User;
   userSuscription: Subscription = new Subscription();
 
   constructor(private firebaseAuth: AngularFireAuth,
               private router: Router,
+
               private store: Store<AppState>,
               private firestore: AngularFirestore) { }
 
@@ -102,19 +104,23 @@ export class AuthService {
     this.userSuscription.unsubscribe();
     this.firebaseAuth.signOut();
     this.router.navigate(['/login']);
-
+    this.store.dispatch(new UnSetUserAction());
   }
 
   initAuthListiner() {
     this.firebaseAuth.authState.subscribe((user: any) => {
       if (user) {
-        this.userSuscription = this.firestore.doc(`${ user.uid }/usuario` ).valueChanges().subscribe(
+
+        this.userSuscription = this.firestore.doc(`${ user.uid }/usuario` ).get().subscribe(
           (userObjMod: any) => {
-            this.store.dispatch( new SetUserAction(new User(userObjMod)));
+            this.usuario = new User(userObjMod.data());
+            this.store.dispatch( new SetUserAction(new User(userObjMod.data())));
           }
         );
       } else {
         this.userSuscription.unsubscribe();
+        this.usuario = null;
+        this.store.dispatch(new UnSetUserAction());
       }
     });
   }
@@ -125,10 +131,14 @@ export class AuthService {
       if (user === null) {
         this.router.navigate(['/login']);
       }
-
       return user != null;
     }
     ));
+  }
+
+  getUsuario() {
+    // extrae todas las propiedades del objeto y las separa para ser enviadas .....
+    return { ...this.usuario };
   }
 
 }
