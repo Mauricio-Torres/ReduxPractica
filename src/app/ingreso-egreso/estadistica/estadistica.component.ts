@@ -6,6 +6,7 @@ import { IngresoEgreso } from '../../models/ingreso-egreso.model';
 import { filter } from 'rxjs/operators';
 import { Label, MultiDataSet } from 'ng2-charts';
 import { ChartType } from 'chart.js';
+import { AppStateExtends } from '../ingreso-egreso.reducer';
 
 
 @Component({
@@ -30,7 +31,7 @@ export class EstadisticaComponent implements OnInit, OnDestroy {
   subscriptionUserAuth: Subscription = new Subscription();
 
 
-  constructor( private state: Store<AppState> ) { }
+  constructor( private state: Store<AppStateExtends> ) { }
 
   ngOnInit() {
 
